@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+    <script src="https://embed.typeform.com/embed.js" type="text/javascript"></script>
+    <style>
+        .center-div
+        {
+          margin: 0 auto;
+          max-width: 150px;
+          height: 100px;
+          background-color: #ccc;
+          border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="paypal-button-container" class="center-div"></div>
+
+     <div id="my-embedded-typeform"
+         style="width: 100%; height: 300px;"></div>
+
+        <p>Tiramisu danish powder gingerbread sugar plum wafer biscuit marzipan. Danish soufflé oat cake pie liquorice dessert candy croissant. Biscuit candy gummi bears cookie sweet. Marshmallow jujubes wafer tart lollipop liquorice. Toffee candy liquorice macaroon.</p>
+      </div>
+      <script src="https://embed.typeform.com/embed.js" type="text/javascript"></script>
+      <script type="text/javascript">
+        window.addEventListener("DOMContentLoaded", function() {
+          var el = document.getElementById("my-embedded-typeform");
+          
+          // When instantiating a widget embed, you must provide the DOM element
+          // that will contain your typeform, the URL of your typeform, and your
+          // desired embed settings
+          window.typeformEmbed.makeWidget(el, "https://admin.typeform.com/to/cVa5IG", {
+            hideFooter: true,
+            hideHeaders: true,
+            opacity: 0,
+            onSubmit: function () {
+                console.log('Typeform successfully submitted');
+
+                document.getElementById("my-embedded-typeform").style.display = "none";
+                paypal.Button.render({
+
+                env: 'sandbox', // sandbox | production
+
+                // PayPal Client IDs - replace with your own
+                // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+                client: {
+                    sandbox:    'AZDxjDScFpQtjWTOUtWKbyN_bDt4OgqaF4eYXlewfBP4-8aqX3PiV8e1GWU6liB2CUXlkA59kJXE7M6R',
+                    production: '<insert production client id>'
+                },
+
+                // Show the buyer a 'Pay Now' button in the checkout flow
+                commit: true,
+
+                // payment() is called when the button is clicked
+                payment: function(data, actions) {
+
+                    // Make a call to the REST api to create the payment
+                    return actions.payment.create({
+                        payment: {
+                            transactions: [
+                                {
+                                    amount: { total: '1.00', currency: 'USD' }
+                                }
+                            ]
+                        }
+                    });
+                },
+
+                // onAuthorize() is called when the buyer approves the payment
+                onAuthorize: function(data, actions) {
+                    // Make a call to the REST api to execute the payment
+                    return actions.payment.execute().then(function() {
+                        window.alert('Payment Complete!');
+                    });
+                }
+
+            }, '#paypal-button-container');
+
+            }
+          });
+        });
+      </script>
+</body>
+    
